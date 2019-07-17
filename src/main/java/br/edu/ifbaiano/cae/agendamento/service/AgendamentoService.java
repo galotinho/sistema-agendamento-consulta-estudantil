@@ -35,8 +35,8 @@ public class AgendamentoService {
 
 	@Transactional(readOnly = false)
 	public void salvar(Agendamento agendamento) {
+		repository.save(agendamento);		
 		
-		repository.save(agendamento);
 	}
 
 	@Transactional(readOnly = true)

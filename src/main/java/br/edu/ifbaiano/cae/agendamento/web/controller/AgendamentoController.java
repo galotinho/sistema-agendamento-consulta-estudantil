@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifbaiano.cae.agendamento.domain.Agendamento;
 import br.edu.ifbaiano.cae.agendamento.domain.Especialidade;
 import br.edu.ifbaiano.cae.agendamento.domain.Paciente;
+import br.edu.ifbaiano.cae.agendamento.domain.Perfil;
 import br.edu.ifbaiano.cae.agendamento.domain.PerfilTipo;
 import br.edu.ifbaiano.cae.agendamento.service.AgendamentoService;
 import br.edu.ifbaiano.cae.agendamento.service.EspecialidadeService;
@@ -56,10 +58,10 @@ public class AgendamentoController {
 		return ResponseEntity.ok(service.buscarHorariosNaoAgendadosPorProfissionalIdEData(id, data));
 	}
 	
-	// salvar um consulta agendada
+	// salvar uma consulta agendada
 	@PreAuthorize("hasAuthority('PACIENTE')")
 	@PostMapping({"/salvar"})
-	public String salvar(Agendamento agendamento, RedirectAttributes attr, @AuthenticationPrincipal User user) {
+	public ModelAndView salvar(Agendamento agendamento, RedirectAttributes attr, @AuthenticationPrincipal User user) {
 		Paciente paciente = pacienteService.buscarPorUsuarioEmail(user.getUsername());
 		String titulo = agendamento.getEspecialidade().getTitulo();
 		Especialidade especialidade = especialidadeService
@@ -67,9 +69,19 @@ public class AgendamentoController {
 				.stream().findFirst().get();
 		agendamento.setEspecialidade(especialidade);
 		agendamento.setPaciente(paciente);
+		
+		if(agendamento.getPaciente().getNome() == null) {
+			ModelAndView model = new ModelAndView("error");
+			model.addObject("status", 500);
+			model.addObject("error", "Área Restrita");
+			model.addObject("message", "Preencha seus DADOS CADASTRAIS antes de agendar uma consulta.");
+			return model;
+		}
 		service.salvar(agendamento);
 		attr.addFlashAttribute("sucesso", "Sua consulta foi agendada com sucesso.");
-		return "redirect:/agendamentos/agendar";		
+			
+		
+		return new ModelAndView("redirect:/agendamentos/agendar");		
 	}
 	
 	// abrir pagina de historico de agendamento do paciente
