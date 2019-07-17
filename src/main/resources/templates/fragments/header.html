@@ -22,6 +22,8 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" th:href="@{/u/novo/cadastro/usuario}">Cadastro de Usuários</a>
 							<a class="dropdown-item" th:href="@{/u/lista}">Lista de Usuários</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" th:href="@{#}">Relatórios</a>
 						</div>
 					</li>
 					<li class="nav-item dropdown" sec:authorize="hasAuthority('PROFISSIONAL')"><a

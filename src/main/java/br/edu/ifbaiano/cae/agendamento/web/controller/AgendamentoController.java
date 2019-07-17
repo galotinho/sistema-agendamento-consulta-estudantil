@@ -24,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.edu.ifbaiano.cae.agendamento.domain.Agendamento;
 import br.edu.ifbaiano.cae.agendamento.domain.Especialidade;
 import br.edu.ifbaiano.cae.agendamento.domain.Paciente;
-import br.edu.ifbaiano.cae.agendamento.domain.Perfil;
 import br.edu.ifbaiano.cae.agendamento.domain.PerfilTipo;
 import br.edu.ifbaiano.cae.agendamento.service.AgendamentoService;
 import br.edu.ifbaiano.cae.agendamento.service.EspecialidadeService;
