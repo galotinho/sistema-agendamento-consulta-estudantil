@@ -31,8 +31,7 @@
 							
 							<div class="form-row">
 								<div class="form-group col-md-12">
-									<small class="form-text text-muted">Selecione 
-										a especialidade referente a sua consulta.</small>
+									<small class="form-text text-muted">Especialidade referente à consulta.</small>
 									<input type="text" class="form-control"
 										id="especialidade" placeholder="Odontologia"
 										th:field="*{especialidade.titulo}" required />
@@ -42,7 +41,7 @@
 								</div>
 							</div>
 	
-							<div class="form-row">
+							<div class="form-row" sec:authorize="hasAuthority('PACIENTE')">
 								<div class="form-group col-md-12">
 									<div class="card">
 									  <div class="card-header">
@@ -54,30 +53,63 @@
 									</div>
 								</div>
 							</div>
-							
-							<div class="form-row">								
+							<div class="form-row" sec:authorize="hasAuthority('PROFISSIONAL')">
 								<div class="form-group col-md-12">
-									<small class="form-text text-muted">Selecione 
-										a data da consulta</small>
+									<small class="form-text text-muted">Paciente</small>
+									<input type="text" class="form-control"
+										id="paciente"
+										th:field="*{paciente.nome}" readonly="readonly" />
+									</div>
+							</div>
+							
+							<div class="form-row" sec:authorize="hasAuthority('PACIENTE')">								
+								<div class="form-group col-md-12">
+									<small class="form-text text-muted">Data da consulta</small>
 									<input class="form-control" type="date" id="data" 
 										th:field="*{dataConsulta}" required/>
 									<div class="invalid-feedback">
 								      Data é obrigatória.
 								    </div>	
 								</div>
+							</div>							
+							
+							<div class="form-row" sec:authorize="hasAuthority('PROFISSIONAL')">								
+								<div class="form-group col-md-12">
+									<small class="form-text text-muted">Data da consulta</small>
+									<input class="form-control" type="date" id="data" 
+										th:field="*{dataConsulta}" readonly="readonly"/>
+									<div class="invalid-feedback">
+								      Data é obrigatória.
+								    </div>	
+								</div>
 							</div>
 							
-							<div class="form-row">
+							<div class="form-row" sec:authorize="hasAuthority('PACIENTE')">
 								<div class="form-group col-md-12">
 									<small id="hr-small" class="form-text text-muted">Horários disponíveis
 										para a consulta</small>
 									<select id="horarios" class="custom-select" size="5" 
-										th:field="*{horario.id}" required>
-									  	<option th:value="*{horario.id}" 
-									  			th:text="*{horario.horaMinuto}"></option>
+									th:field="*{horarioS}" required>
+									  	<!-- options by jQuery -->
 									</select>
 									<div class="invalid-feedback">Horário é obrigatório</div>
 								</div>
+							</div>
+							
+							<div class="form-row" sec:authorize="hasAuthority('PROFISSIONAL')">
+								<div class="form-group col-md-12">
+									<small class="form-text text-muted">Horário</small>
+									<input type="text" class="form-control"
+										id="horario"
+										th:field="*{horario.horaMinuto}" readonly="readonly" />
+									</div>
+							</div>
+														  
+						    <div class="custom-control custom-checkbox mb-3" sec:authorize="hasAuthority('PROFISSIONAL')">
+							  <input type="checkbox" class="custom-control-input"
+							      id="comparecimento" th:field="*{comparecimento}"
+							      th:checked="${agendamento.comparecimento}">
+						      <label class="custom-control-label" for="comparecimento">Compareceu?</label>
 							</div>
 							
 							<input type="hidden" th:field="*{id}"/>							
@@ -117,6 +149,18 @@
 				});
 			});
 		});
+	/*[/]*/	
+	/*[# th:if="${agendamento.id != null}"]*/
+	$( document ).ready(function() {
+		var profissional = $('input[name="profissional.id"]:checked').val();
+		$.get('/profissionais/horarios/hora/disponivel/'+[[${agendamento.dataConsulta}]]+'/'+[[${agendamento.profissional.id}]] , function( result ) {
+	   		$.each(result, function (k, v) {
+	   			$("#horarios").append( 
+	   				'<option class="op" value="'+ v.id +'">'+ v.horaMinuto + '</option>'
+	   			);	            			
+	   	    });
+	   	});
+	});
 	/*[/]*/
 	</script>
 </body>

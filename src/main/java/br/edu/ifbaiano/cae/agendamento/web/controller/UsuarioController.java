@@ -207,5 +207,11 @@ public class UsuarioController {
     	model.addAttribute("texto", "Você já pode logar no sistema.");
     	return "login";
     } 
+    
+    @GetMapping("/relatorio")
+    public String relatorio() {
+    	 
+    	return "relatorio/relatorio";
+    }
 
 }

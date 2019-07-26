@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		 .antMatchers("/u/**").hasAuthority(ADMIN)
 		 
 		 //acessos privados para profissionais
-		 .antMatchers("/profissionais/especialidade/titulo/*").hasAnyAuthority(PACIENTE, PROFISSIONAL)
+		 .antMatchers("/profissionais/especialidade/titulo/*", "/profissionais/horarios/hora/disponivel/*/*").hasAnyAuthority(PACIENTE, PROFISSIONAL)
 		 .antMatchers("/profissionais/dados", "/profissionais/salvar", "/profissionais/editar").hasAnyAuthority(ADMIN,PROFISSIONAL)
 		 .antMatchers("/profissionais/**").hasAuthority(PROFISSIONAL)
 		 

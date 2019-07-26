@@ -23,11 +23,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifbaiano.cae.agendamento.domain.Agendamento;
 import br.edu.ifbaiano.cae.agendamento.domain.Especialidade;
+import br.edu.ifbaiano.cae.agendamento.domain.Horario;
 import br.edu.ifbaiano.cae.agendamento.domain.Paciente;
 import br.edu.ifbaiano.cae.agendamento.domain.PerfilTipo;
 import br.edu.ifbaiano.cae.agendamento.service.AgendamentoService;
 import br.edu.ifbaiano.cae.agendamento.service.EspecialidadeService;
 import br.edu.ifbaiano.cae.agendamento.service.PacienteService;
+import br.edu.ifbaiano.cae.agendamento.service.ProfissionalService;
 
 @Controller
 @RequestMapping("agendamentos")
@@ -39,6 +41,8 @@ public class AgendamentoController {
 	private PacienteService pacienteService;
 	@Autowired
 	private EspecialidadeService especialidadeService;	
+	@Autowired
+	private ProfissionalService profissionalService;
 
 	// abre a pagina de agendamento de consultas 
 	@PreAuthorize("hasAnyAuthority('PACIENTE', 'PROFISSIONAL')")
@@ -46,15 +50,6 @@ public class AgendamentoController {
 	public String agendarConsulta(Agendamento agendamento) {
 
 		return "agendamento/cadastro";		
-	}
-	
-	// busca os horarios livres, ou seja, sem agendamento
-	@PreAuthorize("hasAnyAuthority('PACIENTE', 'PROFISSIONAL')")
-	@GetMapping("/horario/profissional/{id}/data/{data}")
-	public ResponseEntity<?> getHorarios(@PathVariable("id") Long id,
-										 @PathVariable("data") @DateTimeFormat(iso = ISO.DATE) LocalDate data) {
-		
-		return ResponseEntity.ok(service.buscarHorariosNaoAgendadosPorProfissionalIdEData(id, data));
 	}
 	
 	// salvar uma consulta agendada
@@ -68,7 +63,8 @@ public class AgendamentoController {
 				.stream().findFirst().get();
 		agendamento.setEspecialidade(especialidade);
 		agendamento.setPaciente(paciente);
-		
+		agendamento.setHorario(profissionalService.buscarHorario(Long.valueOf(agendamento.getHorarioS())));
+				
 		if(agendamento.getPaciente().getNome() == null) {
 			ModelAndView model = new ModelAndView("error");
 			model.addObject("status", 500);
@@ -115,8 +111,8 @@ public class AgendamentoController {
 										    ModelMap model, @AuthenticationPrincipal User user) {
 		
 		Agendamento agendamento = service.buscarPorIdEUsuario(id, user.getUsername());
-		
 		model.addAttribute("agendamento", agendamento);
+		
 		return "agendamento/cadastro";
 	}
 	
@@ -128,8 +124,14 @@ public class AgendamentoController {
 				.buscarPorTitulos(new String[] {titulo})
 				.stream().findFirst().get();
 		agendamento.setEspecialidade(especialidade);
-		
-		service.editar(agendamento, user.getUsername());
+		Horario horario;
+		if(agendamento.getHorarioS() != null) {
+			horario = profissionalService.buscarHorario(Long.valueOf(agendamento.getHorarioS()));
+		}
+		else {
+			horario = profissionalService.buscarHorario(agendamento.getHorario().getId());
+		}
+		service.editar(agendamento, user.getUsername(), horario);
 		attr.addFlashAttribute("sucesso", "Sua consulta foi alterada com sucesso.");
 		return "redirect:/agendamentos/agendar";
 	}

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+	  layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Custom styles for this template -->
+<link th:href="@{/css/style-relatorio.css(v=${version})}" rel="stylesheet" />
+</head>
+<body>
+
+	<section class="layout-content" layout:fragment="corpo">
+	<section class="jumbotron text-center py-4"></section>
+	<div class="container col-md-6 my-4">
+		<div class="form-inline">								
+			<div class="col-sm-4">
+				<small class="form-text text-muted">Selecione 
+					a data inicial</small>
+				<input class="form-control" type="date" id="data"/>
+			</div>
+			<div class="col-sm-4">
+				<small class="form-text text-muted">Selecione 
+					a data final</small>
+				<input class="form-control" type="date" id="data2"/>
+			</div>
+			<div class="col-sm-4">		
+				<small class="form-text">&nbsp;</small>
+				<button type="submit" class="btn btn-info  btn-lg">Gerar Relatório</button>
+			</div>
+		</div>		
+	</div>
+	<main role="main">
+	
+	<div class="principal">
+	<div class="content py-4">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <div class="card text-black text-center mb-3" >
+						  <div class="card-header bg-info">Consultas Agendadas</div>
+						  <div class="card-body">
+						    <h3 class="card-title">120.310</h3>
+						  </div>
+						</div>
+		            </div>
+                    <div class="col-sm-4 text-center">
+                        <div class="card text-black text-center mb-3">
+						  <div class="card-header bg-success">Consultas Realizadas</div>
+						  <div class="card-body">
+						    <h3 class="card-title">13.050</h3>
+						  </div>
+						</div>
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <div class="card text-black text-center mb-3">
+						  <div class="card-header bg-danger">Índice de Não Comparecimento</div>
+						  <div class="card-body">
+						    <h3 class="card-title">22%</h3>
+						  </div>
+						</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card text-black text-left">
+                            <div class="card-header bg-info">
+                                <h5 class="card-title">Consultas por Especialidade</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>Especialidade</th>
+                                            <th>Agendadas</th>
+                                            <th>Realizadas</th>
+                                            <th>% Não Comparecimento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <p>Odontologia</p>
+                                            </td>
+                                            <td >
+                                                <p>80</p>
+                                            </td>
+                                            <td >
+                                                <p>20</p>
+                                            </td>
+                                            <td >
+                                                <p>17%</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>Medicina</p>
+                                            </td>
+                                            <td >
+                                                <p>80</p>
+                                            </td>
+                                            <td >
+                                                <p>20</p>
+                                            </td>
+                                             <td >
+                                                <p>17%</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>Nutrição</p>
+                                            </td>
+                                            <td >
+                                                <p>80</p>
+                                            </td>
+                                            <td >
+                                                <p>20</p>
+                                            </td>
+                                             <td >
+                                                <p>17%</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>Enfermagem</p>
+                                            </td>
+                                            <td >
+                                                <p>80</p>
+                                            </td>
+                                            <td >
+                                                <p>20</p>
+                                            </td>
+                                             <td >
+                                                <p>17%</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="col-md-6">
+                        <div class="card text-black text-left">
+                            <div class="card-header bg-warning">
+                                <h5 class="card-title">Consultas por Curso</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>Curso</th>
+                                            <th>Agendadas</th>
+                                            <th>Realizadas</th>
+                                            <th>% Não Comparecimento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <tr>
+                                            <td>
+                                                <p>Téc. em Alimentos</p>
+                                            </td>
+                                            <td >
+                                                <p>80</p>
+                                            </td>
+                                            <td >
+                                                <p>20</p>
+                                            </td>
+                                            <td >
+                                                <p>17%</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>Téc. em Agropecuária</p>
+                                            </td>
+                                            <td >
+                                                <p>80</p>
+                                            </td>
+                                            <td >
+                                                <p>20</p>
+                                            </td>
+                                            <td >
+                                                <p>17%</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>Téc. em Agrimensura</p>
+                                            </td>
+                                            <td >
+                                                <p>80</p>
+                                            </td>
+                                            <td >
+                                                <p>20</p>
+                                            </td>
+                                            <td >
+                                                <p>17%</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>E. M. em Informática</p>
+                                            </td>
+                                            <td >
+                                                <p>80</p>
+                                            </td>
+                                            <td >
+                                                <p>20</p>
+                                            </td>
+                                            <td >
+                                                <p>17%</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       </div>
+ 	</main>
+
+	</section>
+ 	<script	th:src="@{/js/agendamento.js(v=${version})}" th:fragment="js"></script>
+	<script th:inline="javascript" th:fragment="inlinescript"></script>
+</body>
+</html>

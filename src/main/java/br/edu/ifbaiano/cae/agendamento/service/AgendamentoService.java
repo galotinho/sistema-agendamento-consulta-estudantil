@@ -27,12 +27,7 @@ public class AgendamentoService {
 	@Autowired
 	private Datatables datatables;
 
-	@Transactional(readOnly = true)
-	public List<Horario> buscarHorariosNaoAgendadosPorProfissionalIdEData(Long id, LocalDate data) {
-		
-		return repository.findByProfissionalIdAndDataNotHorarioAgendado(id, data);
-	}
-
+	
 	@Transactional(readOnly = false)
 	public void salvar(Agendamento agendamento) {
 		repository.save(agendamento);		
@@ -62,11 +57,11 @@ public class AgendamentoService {
 	}
 
 	@Transactional(readOnly = false)
-	public void editar(Agendamento agendamento, String email) {
+	public void editar(Agendamento agendamento, String email, Horario h) {
 		Agendamento ag = buscarPorIdEUsuario(agendamento.getId(), email);
 		ag.setDataConsulta(agendamento.getDataConsulta());
 		ag.setEspecialidade(agendamento.getEspecialidade());
-		ag.setHorario(agendamento.getHorario());
+		ag.setHorario(h);
 		ag.setProfissional(agendamento.getProfissional());
 				
 	}

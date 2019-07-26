@@ -63,7 +63,7 @@ $('#data').on('blur', function () {
     if (!Date.parse(data)) {
         console.log('data nao selecionada')
     } else {
-    	$.get('/agendamentos/horario/profissional/'+ profissional + '/data/' + data , function( result ) {
+    	$.get('/profissionais/horarios/hora/disponivel/'+data+'/'+profissional , function( result ) {
     		$.each(result, function (k, v) {
     			$("#horarios").append( 
     				'<option class="op" value="'+ v.id +'">'+ v.horaMinuto + '</option>'

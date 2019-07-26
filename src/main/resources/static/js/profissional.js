@@ -84,3 +84,57 @@ $(function() {
 			}
 		});
 });
+
+
+/**
+ * Datatable histórico de consultas
+*/
+$(document).ready(function() {
+    moment.locale('pt-BR');
+    var table = $('#table-horarios').DataTable({
+    	language: {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+        },
+        searching : false,
+        lengthMenu : [ 5, 10 ],
+        processing : true,
+        serverSide : true,
+        responsive : true,
+        order: [1, 'desc'],
+        ajax : {
+            url : '/profissionais/datatables/server/disponibilidade',
+            data : 'data'
+        },
+        columns : [
+            {data : 'id'},
+            {data: 'dataDisponivel', render:
+                function( dataDisponivel ) {
+                    return moment(dataDisponivel).format('LL');
+                }
+            },
+            {data : 'horarios',
+            render : function(horarios) {
+				var aux = new Array();
+				$.each(horarios, function( index, value ){
+					  var hora = " ";
+					  hora = hora.concat(value.horaMinuto.substring(0,5));
+					 					  
+					  aux.push(hora);
+				});
+				return aux;
+			}, orderable : false,
+            },
+            {orderable : false,	data : 'id', "render" : function(id) {
+
+                    return '<a class="btn btn-success btn-sm btn-block" href="/profissionais/editar/disponibilidade/'
+                            + id + '" role="button"><i class="fas fa-edit"></i></a>';
+                }
+            },
+            {orderable : false,	data : 'id', "render" : function(id) {
+                    return '<a class="btn btn-danger btn-sm btn-block" href="/profissionais/excluir/disponibilidade/'
+                    + id +'" role="button" data-toggle="modal" data-target="#confirm-modal"><i class="fas fa-times-circle"></i></a>';
+                }
+            }
+        ]
+    });
+});

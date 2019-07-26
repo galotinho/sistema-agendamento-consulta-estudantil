@@ -31,6 +31,12 @@ public class Agendamento extends AbstractEntity {
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate dataConsulta;
 	
+	@Column(name="comparecimento", nullable = false, columnDefinition = "TINYINT(1)")
+	private boolean comparecimento;
+	
+	@Transient
+	private String horarioS;
+	
 	public Especialidade getEspecialidade() {
 		return especialidade;
 	}
@@ -69,5 +75,23 @@ public class Agendamento extends AbstractEntity {
 
 	public void setHorario(Horario horario) {
 		this.horario = horario;
+	}
+
+	@Transient
+	public String getHorarioS() {
+		return horarioS;
+	}
+
+	@Transient
+	public void setHorarioS(String horarioS) {
+		this.horarioS = horarioS;
+	}
+
+	public boolean isComparecimento() {
+		return comparecimento;
+	}
+
+	public void setComparecimento(boolean comparecimento) {
+		this.comparecimento = comparecimento;
 	}
 }
