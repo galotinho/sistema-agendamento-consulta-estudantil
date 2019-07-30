@@ -37,4 +37,11 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long>{
 			+ " (a.id = :id AND a.profissional.usuario.email like :email)")
 	Optional<Agendamento> findByIdAndPacienteOrProfissionalEmail(Long id, String email);
 
+	@Query("select COUNT(a.id) from Agendamento a")
+	int consultasAgendadas();
+
+	@Query("select COUNT(a.id) from Agendamento a "
+			+ "where a.comparecimento = 1")
+	int consultasRealizadas();
+
 }

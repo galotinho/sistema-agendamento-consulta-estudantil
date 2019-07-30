@@ -19,6 +19,13 @@ public class Paciente extends AbstractEntity {
 	@Column(name = "data_nascimento", nullable = false)
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate dtNascimento;
+	
+	@Column(name="sexo", nullable = false, columnDefinition = "CHAR(1)")
+	private char sexo;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_curso")
+	private Curso curso;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "paciente")
@@ -58,6 +65,22 @@ public class Paciente extends AbstractEntity {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public char getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(char sexo) {
+		this.sexo = sexo;
+	}
+
+	public Curso getCurso() {
+		return curso;
+	}
+
+	public void setCurso(Curso curso) {
+		this.curso = curso;
 	}
 
 }

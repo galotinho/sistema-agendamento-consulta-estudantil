@@ -1,7 +1,5 @@
 package br.edu.ifbaiano.cae.agendamento.service;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,8 +60,7 @@ public class AgendamentoService {
 		ag.setDataConsulta(agendamento.getDataConsulta());
 		ag.setEspecialidade(agendamento.getEspecialidade());
 		ag.setHorario(h);
-		ag.setProfissional(agendamento.getProfissional());
-				
+		ag.setProfissional(agendamento.getProfissional());				
 	}
 
 	@Transactional(readOnly = true)
@@ -78,6 +75,12 @@ public class AgendamentoService {
 	public void remover(Long id) {
 		
 		repository.deleteById(id);
+	}
+	@Transactional(readOnly = false)
+	public void editarPeloProfissional(Agendamento agendamento, boolean comparecimento) {
+		Agendamento ag = buscarPorId(agendamento.getId());
+	
+		ag.setComparecimento(comparecimento);			
 	}
 
 }

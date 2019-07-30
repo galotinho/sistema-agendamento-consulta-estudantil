@@ -18,12 +18,13 @@
 						class="btn btn-dark dropdown-toggle" href="#" id="dropdown01"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admistrador</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown01">
+							<a class="dropdown-item" th:href="@{/pacientes/curso/dados}">Cursos</a> 
 							<a class="dropdown-item" th:href="@{/especialidades}">Especialidades</a> 
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" th:href="@{/u/novo/cadastro/usuario}">Cadastro de Usuários</a>
 							<a class="dropdown-item" th:href="@{/u/lista}">Lista de Usuários</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" th:href="@{/u/relatorio}">Relatórios</a>
+							<a class="dropdown-item" th:href="@{/relatorio/dados}">Relatórios</a>
 						</div>
 					</li>
 					<li class="nav-item dropdown" sec:authorize="hasAuthority('PROFISSIONAL')"><a

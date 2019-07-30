@@ -48,6 +48,35 @@
 									<div class="invalid-feedback">Data de nascimento é requerida.</div>
 								</div>
 							</div>							
+							
+							<div class="mb-3">
+								<div class="input-group-prepend">
+									<label for="nome">Sexo</label>
+								</div>					
+								<div class="btn-group btn-group-toggle" data-toggle="buttons">
+								  <label id="activeM" class="btn btn-light">
+								    <input type="radio" th:field="*{sexo}" name="sexo" value="M" autocomplete="off" 
+									 th:checked="${sexo == 'M'}"/> Masculino
+								  </label>
+								  <label id="activeF" class="btn btn-light">
+								    <input type="radio" th:field="*{sexo}" name="sexo" value="F" autocomplete="off" 
+								    th:checked="${sexo == 'F'}"/>Feminino
+								  </label>
+								  <div class="invalid-feedback">Sexo é requerido.</div>
+								</div>
+							</div>
+							
+							<div class="input-group mb-3">
+							  <div class="input-group-prepend">
+							    <label for="nome">Curso</label> 
+							  </div>
+							  <div id="curso" class="input-group">
+								  <select class="custom-select" id="cursos" th:field="*{curso}">
+								    
+								  </select>
+								  <div class="invalid-feedback">Curso é requerido.</div>
+							  </div>
+							</div>							
 															
 							<div class="mb-3">
 								<label for="email">Email</label>
@@ -90,6 +119,49 @@
 
 	</section>
 	<script	th:src="~{}" th:fragment="js"></script>
-	<script th:inline="javascript" th:fragment="inlinescript"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">	
+	
+	/*[# th:if="${paciente.curso != null}"]*/
+	$(document).ready(function() {
+		$.get('/pacientes/curso/listar' , function( result ) {
+	    	$.each(result, function (k, v) {
+	    		if(v.id == [[${paciente.curso.id}]]){
+	    			$("#cursos").append( 
+	        				'<option name= "op" class="op" value="'+ v.id +'" selected="selected">'+ v.nome + '</option>'
+	        		);
+	    		}else{
+	    			$("#cursos").append( 
+	        				'<option name= "op" class="op" value="'+ v.id +'">'+ v.nome + '</option>'
+	        		);
+	    		}
+    				            			
+	    	  });
+	    	});
+	    });
+	/*[/]*/	
+	
+	/*[# th:if="${paciente.curso == null}"]*/
+	$(document).ready(function() {
+		$.get('/pacientes/curso/listar' , function( result ) {
+	    	$.each(result, function (k, v) {	    		
+    			$("#cursos").append( 
+        				'<option name= "op" class="op" value="'+ v.id +'">'+ v.nome + '</option>'
+        		);	    			            			
+	    	  });
+	    	});
+	    });
+	/*[/]*/	
+	
+	$(document).ready(function() {
+   		var element;
+   		if([[${paciente.sexo}]] == 'F'){
+   			element = document.getElementById("activeF");
+   		}else{
+   			element = document.getElementById("activeM");
+   		}
+   		  		
+   		element.classList.add("active");
+	});
+	</script>
 </body>
 </html>

@@ -1,12 +1,8 @@
 package br.edu.ifbaiano.cae.agendamento.web.controller;
 
-import java.time.LocalDate;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -111,12 +107,13 @@ public class AgendamentoController {
 										    ModelMap model, @AuthenticationPrincipal User user) {
 		
 		Agendamento agendamento = service.buscarPorIdEUsuario(id, user.getUsername());
-		model.addAttribute("agendamento", agendamento);
 		
+		model.addAttribute("agendamento", agendamento);
+	
 		return "agendamento/cadastro";
 	}
 	
-	@PreAuthorize("hasAnyAuthority('PACIENTE', 'PROFISSIONAL')")
+	@PreAuthorize("hasAuthority('PACIENTE')")
 	@PostMapping("/editar")
 	public String editarConsulta(Agendamento agendamento, RedirectAttributes attr, @AuthenticationPrincipal User user) {
 		String titulo = agendamento.getEspecialidade().getTitulo();
@@ -136,6 +133,19 @@ public class AgendamentoController {
 		return "redirect:/agendamentos/agendar";
 	}
 	
+	@PreAuthorize("hasAuthority('PROFISSIONAL')")
+	@PostMapping("/editar/agendamento/profissional")
+	public String editarConsultaPeloProfissional(Agendamento agendamentoP, RedirectAttributes attr, @AuthenticationPrincipal User user) {
+				
+		if(agendamentoP.isComparecimento()) {
+			service.editarPeloProfissional(agendamentoP, true);
+		}else {
+			service.editarPeloProfissional(agendamentoP, false);
+		}
+		
+		attr.addFlashAttribute("sucesso", "Alteração realizada com sucesso.");
+		return "redirect:/agendamentos/historico/paciente";
+	}
 	
 	@PreAuthorize("hasAuthority('PACIENTE')")
 	@GetMapping("/excluir/consulta/{id}")
