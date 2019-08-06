@@ -15,9 +15,10 @@ import br.edu.ifbaiano.cae.agendamento.repository.ProfissionalRepository;
 
 
 @SpringBootApplication
-public class CaeAgendamentoApplication implements CommandLineRunner{
-	@Autowired
-	private ProfissionalRepository repository;
+public class CaeAgendamentoApplication {
+//implements CommandLineRunner{
+	//@Autowired
+	//private ProfissionalRepository repository;
 	public static void main(String[] args) {
 		SpringApplication.run(CaeAgendamentoApplication.class, args);
 		
@@ -59,7 +60,7 @@ public class CaeAgendamentoApplication implements CommandLineRunner{
 		
 	}
 	*/
-
+/*
 	@Override
 	public void run(String... args) throws Exception {
 		
@@ -72,5 +73,6 @@ public class CaeAgendamentoApplication implements CommandLineRunner{
 		}		
 		
 	}
+	*/
 	
 }

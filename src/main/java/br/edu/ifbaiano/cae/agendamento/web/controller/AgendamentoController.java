@@ -1,5 +1,9 @@
 package br.edu.ifbaiano.cae.agendamento.web.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ import br.edu.ifbaiano.cae.agendamento.domain.Horario;
 import br.edu.ifbaiano.cae.agendamento.domain.Paciente;
 import br.edu.ifbaiano.cae.agendamento.domain.PerfilTipo;
 import br.edu.ifbaiano.cae.agendamento.service.AgendamentoService;
+import br.edu.ifbaiano.cae.agendamento.service.EmailService;
 import br.edu.ifbaiano.cae.agendamento.service.EspecialidadeService;
 import br.edu.ifbaiano.cae.agendamento.service.PacienteService;
 import br.edu.ifbaiano.cae.agendamento.service.ProfissionalService;
@@ -39,12 +44,16 @@ public class AgendamentoController {
 	private EspecialidadeService especialidadeService;	
 	@Autowired
 	private ProfissionalService profissionalService;
+	@Autowired
+	private EmailService emailService;
 
 	// abre a pagina de agendamento de consultas 
 	@PreAuthorize("hasAnyAuthority('PACIENTE', 'PROFISSIONAL')")
 	@GetMapping({"/agendar"})
-	public String agendarConsulta(Agendamento agendamento) {
+	public String agendarConsulta(ModelMap model, Agendamento agendamento) {
 
+		model.addAttribute("especialidades", especialidadeService.buscarTodas());
+		
 		return "agendamento/cadastro";		
 	}
 	
@@ -60,7 +69,12 @@ public class AgendamentoController {
 		agendamento.setEspecialidade(especialidade);
 		agendamento.setPaciente(paciente);
 		agendamento.setHorario(profissionalService.buscarHorario(Long.valueOf(agendamento.getHorarioS())));
-				
+		
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate dataConsulta = LocalDate.parse(agendamento.getDataS(), df);
+		
+		agendamento.setDataConsulta(dataConsulta);	
+		
 		if(agendamento.getPaciente().getNome() == null) {
 			ModelAndView model = new ModelAndView("error");
 			model.addObject("status", 500);
@@ -128,7 +142,10 @@ public class AgendamentoController {
 		else {
 			horario = profissionalService.buscarHorario(agendamento.getHorario().getId());
 		}
-		service.editar(agendamento, user.getUsername(), horario);
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate dataConsulta = LocalDate.parse(agendamento.getDataS(), df);
+		
+		service.editar(agendamento, user.getUsername(), horario, dataConsulta);
 		attr.addFlashAttribute("sucesso", "Sua consulta foi alterada com sucesso.");
 		return "redirect:/agendamentos/agendar";
 	}
@@ -147,10 +164,24 @@ public class AgendamentoController {
 		return "redirect:/agendamentos/historico/paciente";
 	}
 	
-	@PreAuthorize("hasAuthority('PACIENTE')")
+	@PreAuthorize("hasAnyAuthority('PACIENTE', 'PROFISSIONAL')")
 	@GetMapping("/excluir/consulta/{id}")
-	public String excluirConsulta(@PathVariable("id") Long id, RedirectAttributes attr) {
+	public String excluirConsulta(@PathVariable("id") Long id, RedirectAttributes attr) throws MessagingException {
+		Agendamento agendamento = service.buscarPorId(id);
+		
+		LocalDate dataConsulta = agendamento.getDataConsulta();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, dd / MMMM / yyyy");
+		String data = dataConsulta.format(formatter);
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+		String horario = agendamento.getHorario().getHoraMinuto().format(dtf);
+		
+		String especialidade = agendamento.getEspecialidade().getTitulo();
+		String destinoProfissional = agendamento.getProfissional().getUsuario().getEmail();
+		String destinoPaciente = agendamento.getPaciente().getUsuario().getEmail();
+		
 		service.remover(id);
+		emailService.enviarEmailCancelamentoConsulta(destinoPaciente, destinoProfissional, data, horario, especialidade);
 		attr.addFlashAttribute("sucesso", "Consulta excluída com sucesso.");
 		return "redirect:/agendamentos/historico/paciente";
 	}

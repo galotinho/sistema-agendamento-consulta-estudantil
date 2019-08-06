@@ -29,8 +29,24 @@
 						<form th:action="${agendamento.id == null} ? @{/agendamentos/salvar} : @{/agendamentos/editar}" th:object="${agendamento}"
 							method="POST" class="was-validated"  sec:authorize="hasAuthority('PACIENTE')">
 							
-							<div class="form-row">
+							<div class="form-row" th:if="${agendamento.id == null}">
 								<div class="form-group col-md-12">
+									<div class="card">
+									  <div class="card-header"> 
+									  	Especialidades Disponíveis									  
+									  </div>
+									  <div class="card-body"> 
+									    <small class="form-text text-muted"  
+										    th:each="especialidade : ${especialidades}" 
+										  	th:text="${especialidade.titulo}">
+										</small>									    
+									  </div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-row">
+								<div id="data2" class="form-group col-md-12">
 									<small class="form-text text-muted">Especialidade referente à consulta.</small>
 									<input type="text" class="form-control"
 										id="especialidade" placeholder="Odontologia"
@@ -57,8 +73,8 @@
 							<div class="form-row">								
 								<div class="form-group col-md-12">
 									<small class="form-text text-muted">Data da consulta</small>
-									<input class="form-control" type="date" id="data" 
-										th:field="*{dataConsulta}" required/>
+									<input class="form-control datepicker" type="text" id="datapicker-custom"
+										th:field="*{dataS}" required/>
 									<div class="invalid-feedback">
 								      Data é obrigatória.
 								    </div>	
@@ -178,9 +194,20 @@
 			});
 		});
 	/*[/]*/	
+	
 	/*[# th:if="${agendamento.id != null}"]*/
-	$( document ).ready(function() {
-		var profissional = $('input[name="profissional.id"]:checked').val();
+	$( document ).ready(function() {	
+		$("#especialidade").attr('readonly', 'readonly');
+		
+		var data = [[${agendamento.dataConsulta}]];
+		data = data.split('-');
+		$("#datapicker-custom").val(data[2]+'/'+data[1]+'/'+data[0]);
+		
+		$.get('/profissionais/horarios/data/disponivel/'+[[${agendamento.profissional.id}]], function( result ){
+			Datas = result;
+			Datas = Datas.split(',');
+		});	
+		
 		$.get('/profissionais/horarios/hora/disponivel/'+[[${agendamento.dataConsulta}]]+'/'+[[${agendamento.profissional.id}]] , function( result ) {
 	   		$.each(result, function (k, v) {
 	   			$("#horarios").append( 
@@ -190,7 +217,49 @@
 	   	});
 	});
 	/*[/]*/
+	
+	
+	var Datas = '';
+	$("#profissionais").on('change', function(){
+		$("#horarios").empty();
+		$("#datapicker-custom").val("");
+		var prof = $('input[name="profissional.id"]:checked').val();
+		$.get('/profissionais/horarios/data/disponivel/'+prof, function( result ){
+			Datas = result;
+			Datas = Datas.split(',');
+		});						
+	});
+	
+	function selecionavel(datadopicker) {
+	    var DataSecundaria = ('0' + datadopicker.getDate()).slice(-2) + "/" + ('0' + (datadopicker.getMonth() + 1)).slice(-2) + "/" + datadopicker.getFullYear();
 
+		if ($.inArray(DataSecundaria , Datas) != -1) {
+	        return [true, ""];
+	    } else {
+	        return [false, ""];
+	    }
+	 }
+			
+  	 $( "#datapicker-custom" ).datepicker({ 
+  		showOn: "both",
+  		autoclose: false,
+  	    buttonImage: "/image/calendar.gif",
+  	    buttonImageOnly: true,                  
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        dateFormat: 'dd/mm/yy',
+        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
+        dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+        today: 'Hoje',
+        clear: 'Limpar',
+        close: 'Fechar',
+        beforeShowDay : selecionavel
+       
+	});
+  	 
 	</script>
 </body>
 </html>

@@ -78,4 +78,10 @@ public class EspecialidadeService {
 		return dataTables.getResponse(page);
 	}
 
+	@Transactional(readOnly=true)
+	public List<Especialidade> buscarTodas() {
+
+		return repository.findAll();
+	}
+
 }

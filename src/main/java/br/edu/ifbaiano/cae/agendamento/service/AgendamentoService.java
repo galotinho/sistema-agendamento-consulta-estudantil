@@ -1,5 +1,6 @@
 package br.edu.ifbaiano.cae.agendamento.service;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,9 +56,9 @@ public class AgendamentoService {
 	}
 
 	@Transactional(readOnly = false)
-	public void editar(Agendamento agendamento, String email, Horario h) {
+	public void editar(Agendamento agendamento, String email, Horario h, LocalDate dataConsulta) {
 		Agendamento ag = buscarPorIdEUsuario(agendamento.getId(), email);
-		ag.setDataConsulta(agendamento.getDataConsulta());
+		ag.setDataConsulta(dataConsulta);
 		ag.setEspecialidade(agendamento.getEspecialidade());
 		ag.setHorario(h);
 		ag.setProfissional(agendamento.getProfissional());				

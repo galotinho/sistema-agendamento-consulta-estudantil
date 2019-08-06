@@ -67,5 +67,10 @@ public interface ProfissionalRepository extends JpaRepository<Profissional, Long
 			+ "order by h.horaMinuto asc")
 	List<Horario> findByProfissionalIdAndDataNotHorarioAgendado(Long id, LocalDate data);
 
+	@Query("select d.dataDisponivel "
+			+ "from Data d "
+			+ "where d.profissional.id = :idProfissional")
+	List<LocalDate> findAllDatesAvailables(Long idProfissional);
+
 	
 }

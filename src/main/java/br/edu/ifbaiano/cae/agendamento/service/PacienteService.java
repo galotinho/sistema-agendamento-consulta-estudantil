@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import br.edu.ifbaiano.cae.agendamento.datatables.Datatables;
 import br.edu.ifbaiano.cae.agendamento.datatables.DatatablesColunas;
 import br.edu.ifbaiano.cae.agendamento.domain.Curso;
-import br.edu.ifbaiano.cae.agendamento.domain.Horario;
 import br.edu.ifbaiano.cae.agendamento.domain.Paciente;
 import br.edu.ifbaiano.cae.agendamento.repository.CursoRepository;
 import br.edu.ifbaiano.cae.agendamento.repository.PacienteRepository;

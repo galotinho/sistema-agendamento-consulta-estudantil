@@ -10,69 +10,66 @@ $("#especialidade").autocomplete({
             	termo: request.term
 			},
             success: function (data) {
-            	response(data);
+            	response(data);            	
             }
-        });
+		});    
+    },
+    /**
+     * após a especialidade ser selecionada busca
+     * os especialistas referentes e os adiciona na página com
+     * radio
+     */
+    select: function (event, ui){
+        $('div').remove(".custom-radio");
+        $("#horarios").empty();
+    	$("#datapicker-custom").val("");
+    	var titulo = ui.item.label;
+    	if ( titulo != '' ) {			
+    		$.get( "/profissionais/especialidade/titulo/" + titulo , function( result ) {
+    				
+    			var ultimo = result.length - 1; 
+    			
+    			$.each(result, function (k, v) {
+    				
+    				if ( k == ultimo ) {
+    	    			$("#profissionais").append( 
+    	    				 '<div class="custom-control custom-radio">'	
+    	    				+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="profissional.id" value="'+ v.id +'" required>'
+    						+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
+    						+  '<div class="invalid-feedback">Profissional é obrigatório</div>'
+    						+'</div>'
+    	    			);
+    				} else {
+    	    			$("#profissionais").append( 
+    	    				 '<div class="custom-control custom-radio">'	
+    	    				+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="profissional.id" value="'+ v.id +'" required>'
+    						+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
+    						+'</div>'
+    	        		);	            				
+    				}
+    		    });
+    		});
+    	}
     }
 });
-
-/**
- * após a especialidade ser selecionado busca
- * os especialistas referentes e os adiciona na página com
- * radio
- */
-$('#especialidade').on('blur', function() {
-    $('div').remove(".custom-radio");
-	var titulo = $(this).val();
-	if ( titulo != '' ) {			
-		$.get( "/profissionais/especialidade/titulo/" + titulo , function( result ) {
-				
-			var ultimo = result.length - 1; 
-			
-			$.each(result, function (k, v) {
-				
-				if ( k == ultimo ) {
-	    			$("#profissionais").append( 
-	    				 '<div class="custom-control custom-radio">'	
-	    				+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="profissional.id" value="'+ v.id +'" required>'
-						+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
-						+  '<div class="invalid-feedback">Profissional é obrigatório</div>'
-						+'</div>'
-	    			);
-				} else {
-	    			$("#profissionais").append( 
-	    				 '<div class="custom-control custom-radio">'	
-	    				+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="profissional.id" value="'+ v.id +'" required>'
-						+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
-						+'</div>'
-	        		);	            				
-				}
-		    });
-		});
-	}
-});	
 
 /** 
  * busca os horários livres para consulta conforme a data e o profissional.
  * os horários são adicionados a página como um select:option.	
 */
-$('#data').on('blur', function () {
+$('#datapicker-custom').on('change', function () {
 	$("#horarios").empty();
-    var data = $(this).val();
-    var profissional = $('input[name="profissional.id"]:checked').val();
-    if (!Date.parse(data)) {
-        console.log('data nao selecionada')
-    } else {
-    	$.get('/profissionais/horarios/hora/disponivel/'+data+'/'+profissional , function( result ) {
+	var data = $(this).val().split('/');
+	data = data[2]+'-'+data[1]+'-'+data[0];
+	var profissional = $('input[name="profissional.id"]:checked').val();
+   	$.get('/profissionais/horarios/hora/disponivel/'+data+'/'+profissional , function( result ) {
     		$.each(result, function (k, v) {
     			$("#horarios").append( 
     				'<option class="op" value="'+ v.id +'">'+ v.horaMinuto + '</option>'
     			);	            			
     	    });
     	});
-    }
-});
-
+ });
 
 /**
  * Datatable histórico de consultas

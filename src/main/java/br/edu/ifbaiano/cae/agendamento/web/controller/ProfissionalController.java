@@ -104,6 +104,15 @@ public class ProfissionalController {
 		return ResponseEntity.ok(service.buscarHorariosDisponibilizados(user.getUsername(), LocalDate.parse(data)));
 	}
 	
+	@GetMapping("/horarios/data/disponivel/{idProfissional}")
+	public ResponseEntity<?> getDatasDisponibilizadas(@PathVariable("idProfissional") Long idProfissional){
+		
+		String datasDisponiveis = service.buscarDatasDisponiveis(idProfissional);
+		
+		return ResponseEntity.ok(datasDisponiveis);
+	}
+	
+	
 	@GetMapping("/horarios/hora/disponivel/{data}/{idProfissional}")
 	public ResponseEntity<?> getHorariosDisponibilizados(@PathVariable("data") String data, @PathVariable("idProfissional") Long idProfissional) {
 		

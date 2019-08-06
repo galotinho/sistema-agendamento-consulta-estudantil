@@ -1,6 +1,7 @@
 package br.edu.ifbaiano.cae.agendamento.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -147,6 +148,26 @@ public class ProfissionalService {
 	public List<Horario> buscarHorariosIdDataNotAgendado(Long idProfissional, LocalDate data) {
 		
 		return repository.findByProfissionalIdAndDataNotHorarioAgendado(idProfissional, data);
+	}
+
+	@Transactional(readOnly = true)
+	public String buscarDatasDisponiveis(Long idProfissional) {
+		List<LocalDate> datasDisponiveis = repository.findAllDatesAvailables(idProfissional);
+		
+		String datas = "";
+		String formato = "dd/MM/yyyy";
+		DateTimeFormatter dataFormatada = DateTimeFormatter.ofPattern(formato);
+		
+		for(int i = 0; i<datasDisponiveis.size(); i++) {
+			String d = datasDisponiveis.get(i).format(dataFormatada);
+			
+			if(i != (datasDisponiveis.size()-1) ) {
+				datas += d+",";	
+			}else {
+				datas += d;
+			}					
+		}
+		return datas;
 	}
 	
 }

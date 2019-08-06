@@ -170,7 +170,7 @@ public class UsuarioController {
         attr.addFlashAttribute("alerta", "sucesso");
         attr.addFlashAttribute("titulo", "Cadastro Ativado!");
         attr.addFlashAttribute("texto", "Parabéns, seu cadastro está ativo.");
-        attr.addFlashAttribute("subtexto", "Singa com seu login/senha");
+        attr.addFlashAttribute("subtexto", "Siga com seu login/senha");
     	return "redirect:/login";
     }
     

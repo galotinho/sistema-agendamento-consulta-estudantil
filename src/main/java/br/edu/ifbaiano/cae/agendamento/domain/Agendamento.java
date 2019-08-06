@@ -37,6 +37,9 @@ public class Agendamento extends AbstractEntity {
 	@Transient
 	private String horarioS;
 	
+	@Transient
+	private String dataS;
+	
 	public Especialidade getEspecialidade() {
 		return especialidade;
 	}
@@ -93,5 +96,13 @@ public class Agendamento extends AbstractEntity {
 
 	public void setComparecimento(boolean comparecimento) {
 		this.comparecimento = comparecimento;
+	}
+
+	public String getDataS() {
+		return dataS;
+	}
+
+	public void setDataS(String dataS) {
+		this.dataS = dataS;
 	}
 }

@@ -59,7 +59,7 @@
 	                        <div class="card text-black text-center mb-3">
 							  <div class="card-header bg-danger">Índice de Não Comparecimento</div>
 							  <div class="card-body">
-							    <h3 class="card-title inline" th:text="${#strings.concat(#numbers.formatDecimal(rel.percNaoComparecimento,2,0),'%')}">22%</h3>
+							    <h3 class="card-title inline" th:text="${#strings.concat(#numbers.formatDecimal(rel.percNaoComparecimento,1,0),'%')}">22%</h3>
 							    
 							  </div>
 							</div>
@@ -82,60 +82,18 @@
 	                                        </tr>
 	                                    </thead>
 	                                    <tbody>
-	                                        <tr>
+	                                        <tr th:each="relEsp : ${relatorioPorEspecialidade}">
 	                                            <td>
-	                                                <p>Odontologia</p>
+	                                                <p th:text="${relEsp.especialidade}">Odontologia</p>
 	                                            </td>
 	                                            <td >
-	                                                <p>80</p>
+	                                                <p th:text="${relEsp.totalConsultasAgendadas}">80</p>
 	                                            </td>
 	                                            <td >
-	                                                <p>20</p>
+	                                                <p th:text="${relEsp.totalConsultasRealizadas}">20</p>
 	                                            </td>
 	                                            <td >
-	                                                <p>17%</p>
-	                                            </td>
-	                                        </tr>
-	                                        <tr>
-	                                            <td>
-	                                                <p>Medicina</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>80</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>20</p>
-	                                            </td>
-	                                             <td >
-	                                                <p>17%</p>
-	                                            </td>
-	                                        </tr>
-	                                        <tr>
-	                                            <td>
-	                                                <p>Nutrição</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>80</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>20</p>
-	                                            </td>
-	                                             <td >
-	                                                <p>17%</p>
-	                                            </td>
-	                                        </tr>
-	                                        <tr>
-	                                            <td>
-	                                                <p>Enfermagem</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>80</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>20</p>
-	                                            </td>
-	                                             <td >
-	                                                <p>17%</p>
+	                                                <p th:text="${#strings.concat(#numbers.formatDecimal(relEsp.percNaoComparecimento,1,0),'%')}">17%</p>
 	                                            </td>
 	                                        </tr>
 	                                    </tbody>
@@ -160,60 +118,18 @@
 	                                        </tr>
 	                                    </thead>
 	                                    <tbody>
-	                                         <tr>
+	                                         <tr th:each="relCur : ${relatorioPorCurso}">
 	                                            <td>
-	                                                <p>Téc. em Alimentos</p>
+	                                                <p th:text="${relCur.curso}">Téc. em Alimentos</p>
 	                                            </td>
 	                                            <td >
-	                                                <p>80</p>
+	                                                <p th:text="${relCur.totalConsultasAgendadas}">80</p>
 	                                            </td>
 	                                            <td >
-	                                                <p>20</p>
+	                                                <p th:text="${relCur.totalConsultasRealizadas}">20</p>
 	                                            </td>
 	                                            <td >
-	                                                <p>17%</p>
-	                                            </td>
-	                                        </tr>
-	                                        <tr>
-	                                            <td>
-	                                                <p>Téc. em Agropecuária</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>80</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>20</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>17%</p>
-	                                            </td>
-	                                        </tr>
-	                                        <tr>
-	                                            <td>
-	                                                <p>Téc. em Agrimensura</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>80</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>20</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>17%</p>
-	                                            </td>
-	                                        </tr>
-	                                        <tr>
-	                                            <td>
-	                                                <p>E. M. em Informática</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>80</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>20</p>
-	                                            </td>
-	                                            <td >
-	                                                <p>17%</p>
+	                                                <p th:text="${#strings.concat(#numbers.formatDecimal(relCur.percNaoComparecimento,1,0),'%')}">17%</p>
 	                                            </td>
 	                                        </tr>
 	                                    </tbody>
