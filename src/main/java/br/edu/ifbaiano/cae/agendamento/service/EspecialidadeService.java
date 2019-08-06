@@ -65,7 +65,7 @@ public class EspecialidadeService {
 	@Transactional(readOnly=true)
 	public Set<Especialidade> buscarPorTitulos(String[] titulos) {
 		
-		return repository.findByTitulo(titulos);
+		return repository.findByTituloIn(titulos);
 	}
 
 	@Transactional(readOnly=true)

@@ -19,7 +19,7 @@ public interface EspecialidadeRepository extends JpaRepository<Especialidade, Lo
 	List<String> findByTermo(String termo);
 
 	@Query("select e from Especialidade e where e.titulo IN :titulos")
-	Set<Especialidade> findByTitulo(String[] titulos);
+	Set<Especialidade> findByTituloIn(String[] titulos);
 	
 	@Query("select e from Especialidade e "
 			+ "join e.profissionais p "
