@@ -122,9 +122,13 @@ public class AgendamentoController {
 		
 		Agendamento agendamento = service.buscarPorIdEUsuario(id, user.getUsername());
 		
-		model.addAttribute("agendamento", agendamento);
-	
-		return "agendamento/cadastro";
+		if(agendamento.getDataConsulta().isBefore(LocalDate.now())) {
+			model.addAttribute("falha", "Consulta não pode mais ser modificada. ");
+			return "agendamento/historico-paciente";
+		}else {
+			model.addAttribute("agendamento", agendamento);
+			return "agendamento/cadastro";
+		}
 	}
 	
 	@PreAuthorize("hasAuthority('PACIENTE')")
