@@ -69,8 +69,20 @@ public interface ProfissionalRepository extends JpaRepository<Profissional, Long
 
 	@Query("select d.dataDisponivel "
 			+ "from Data d "
-			+ "where d.profissional.id = :idProfissional")
-	List<LocalDate> findAllDatesAvailables(Long idProfissional);
+			+ "where d.profissional.id = :idProfissional AND "
+			+ "d.dataDisponivel >= :dataAtual")
+	List<LocalDate> findAllDatesAvailables(Long idProfissional, LocalDate dataAtual);
+
+	@Query("select d.dataDisponivel "
+			+ "from Data d "
+			+ "where d.dataDisponivel = :data")
+	List<LocalDate> findByData(LocalDate data);
+
+	@Query("select d.dataDisponivel "
+			+ "from Data d "
+			+ "where d.dataDisponivel = :data AND "
+			+ "d.id != :id")
+	List<LocalDate> findByDataAndID(LocalDate data, Long id);
 
 	
 }

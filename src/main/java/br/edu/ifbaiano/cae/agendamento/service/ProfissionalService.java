@@ -152,7 +152,8 @@ public class ProfissionalService {
 
 	@Transactional(readOnly = true)
 	public String buscarDatasDisponiveis(Long idProfissional) {
-		List<LocalDate> datasDisponiveis = repository.findAllDatesAvailables(idProfissional);
+		LocalDate dataAtual = LocalDate.now();
+		List<LocalDate> datasDisponiveis = repository.findAllDatesAvailables(idProfissional, dataAtual);
 		
 		String datas = "";
 		String formato = "dd/MM/yyyy";
@@ -168,6 +169,27 @@ public class ProfissionalService {
 			}					
 		}
 		return datas;
+	}
+
+	@Transactional(readOnly = true)
+	public boolean dataJaDisponibilizada(LocalDate data) {
+		
+		List<LocalDate> datas = repository.findByData(data);
+
+		if(datas.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+
+	@Transactional(readOnly = true)
+	public boolean dataJaDisponibilizada(LocalDate dataDisponivel, Long id) {
+		List<LocalDate> datas = repository.findByDataAndID(dataDisponivel, id);
+
+		if(datas.isEmpty()) {
+			return false;
+		}
+		return true;
 	}
 	
 }

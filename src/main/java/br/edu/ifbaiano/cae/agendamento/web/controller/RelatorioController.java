@@ -43,9 +43,22 @@ public class RelatorioController {
 		
 		ModelAndView mav = new ModelAndView("relatorio/relatorio");
 		
-		mav.addObject("relatorio", service.listarTudoPorData(dataInicial, dataFinal));
-		mav.addObject("relatorioPorEspecialidade", service.listarTudoPorEspecialidadePorData(dataInicial, dataFinal));
-		mav.addObject("relatorioPorCurso", service.listarTudoPorCursoPorData(dataInicial, dataFinal));
+		if(dataFinal.isAfter(dataInicial) || 
+				dataFinal.isEqual(dataInicial)) {
+			
+			mav.addObject("relatorio", service.listarTudoPorData(dataInicial, dataFinal));
+			mav.addObject("relatorioPorEspecialidade", service.listarTudoPorEspecialidadePorData(dataInicial, dataFinal));
+			mav.addObject("relatorioPorCurso", service.listarTudoPorCursoPorData(dataInicial, dataFinal));
+			
+		}else {
+			
+			mav.addObject("falha", "A data final deverá ser igual ou posterior a data inicial! Corrija e refaça o relatório!");
+			
+			mav.addObject("relatorio", service.listarTudoPorData(dataInicial, dataFinal));
+			mav.addObject("relatorioPorEspecialidade", service.listarTudoPorEspecialidadePorData(dataInicial, dataFinal));
+			mav.addObject("relatorioPorCurso", service.listarTudoPorCursoPorData(dataInicial, dataFinal));
+					
+		}
 		
 		return mav;		
 	}

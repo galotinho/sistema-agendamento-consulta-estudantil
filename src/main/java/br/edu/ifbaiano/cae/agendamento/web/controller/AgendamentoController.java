@@ -180,9 +180,16 @@ public class AgendamentoController {
 		String destinoProfissional = agendamento.getProfissional().getUsuario().getEmail();
 		String destinoPaciente = agendamento.getPaciente().getUsuario().getEmail();
 		
-		service.remover(id);
-		emailService.enviarEmailCancelamentoConsulta(destinoPaciente, destinoProfissional, data, horario, especialidade);
-		attr.addFlashAttribute("sucesso", "Consulta excluída com sucesso.");
+		if(dataConsulta.isAfter(LocalDate.now())) {
+			service.remover(id);
+			emailService.enviarEmailCancelamentoConsulta(destinoPaciente, destinoProfissional, data, horario, especialidade);
+			attr.addFlashAttribute("sucesso", "Consulta cancelada com sucesso.");
+		}else {
+			attr.addFlashAttribute("falha", "Consulta só pode ser cancelada com "
+					+ "no mínimo 01 dia de antencedência.");
+		}
+		
+		
 		return "redirect:/agendamentos/historico/paciente";
 	}
 

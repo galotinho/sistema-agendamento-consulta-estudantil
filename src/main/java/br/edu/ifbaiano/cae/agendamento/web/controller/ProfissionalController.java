@@ -129,9 +129,21 @@ public class ProfissionalController {
 		dataDisponibilizada.setProfissional(service.buscarPorEmail(user.getUsername()));
 		dataDisponibilizada.setHorarios(converter(dataDisponibilizada.getHorarioLista()));
 		
-		service.salvarHorarioDisponivel(dataDisponibilizada);
+		LocalDate hoje = LocalDate.now();
 		
-		attr.addFlashAttribute("sucesso", "Operação realizada com sucesso!");
+		if(service.dataJaDisponibilizada(dataDisponibilizada.getDataDisponivel())) {
+			attr.addFlashAttribute("falha", "Data já disponibilizada! Para incluir novos horários, edite-a!");	
+		}else {
+			if(hoje.isBefore(dataDisponibilizada.getDataDisponivel()) || 
+					hoje.isEqual(dataDisponibilizada.getDataDisponivel())) {
+				service.salvarHorarioDisponivel(dataDisponibilizada);
+				attr.addFlashAttribute("sucesso", "Operação realizada com sucesso!");
+			}else {
+				attr.addFlashAttribute("falha", "Data deverá ser posterior ou igual a "
+						+ "data de hoje!");			
+			}	
+		}			
+		
 		attr.addFlashAttribute("dataDisponivel", dataDisponibilizada);
 		
 		return "redirect:/profissionais/horarios";
@@ -140,11 +152,24 @@ public class ProfissionalController {
 	@PostMapping("/horarios/editar")
 	public String editarHorario(Data dataDisponibilizada, RedirectAttributes attr, @AuthenticationPrincipal User user) {
 		
-	    service.editarHorarioDisponivel(dataDisponibilizada, 
-				service.buscarPorEmail(user.getUsername()), 
-				converter(dataDisponibilizada.getHorarioLista()));
+		LocalDate hoje = LocalDate.now();
 		
-		attr.addFlashAttribute("sucesso", "Alteração realizada com sucesso!");
+		if(service.dataJaDisponibilizada(dataDisponibilizada.getDataDisponivel(), dataDisponibilizada.getId())) {
+			attr.addFlashAttribute("falha", "Data já disponibilizada! Para incluir novos horários, edite-a!");	
+		}else {		
+			if(hoje.isBefore(dataDisponibilizada.getDataDisponivel()) || 
+					hoje.isEqual(dataDisponibilizada.getDataDisponivel())) {
+				
+				service.editarHorarioDisponivel(dataDisponibilizada, 
+						service.buscarPorEmail(user.getUsername()), 
+						converter(dataDisponibilizada.getHorarioLista()));
+				attr.addFlashAttribute("sucesso", "Operação realizada com sucesso!");
+			}else {
+				attr.addFlashAttribute("falha", "Data deverá ser posterior ou igual a "
+						+ "data de hoje!");			
+			}
+		}
+		
 		attr.addFlashAttribute("dataDisponivel", dataDisponibilizada);
 		
 		return "redirect:/profissionais/horarios";
@@ -159,8 +184,22 @@ public class ProfissionalController {
 	
 	@GetMapping("/excluir/disponibilidade/{id}")
 	public String excluirDisponibilidade(@PathVariable("id") Long id, RedirectAttributes attr) {
-		service.removerDataDisponivel(id);
-		attr.addFlashAttribute("sucesso", "Data excluída com sucesso.");
+		
+		Data dataDisponibilizada = service.buscarDataPorId(id).get();		
+		LocalDate hoje = LocalDate.now();
+		
+		if(hoje.isBefore(dataDisponibilizada.getDataDisponivel()) || 
+				hoje.isEqual(dataDisponibilizada.getDataDisponivel())) {
+			
+			service.removerDataDisponivel(id);
+			attr.addFlashAttribute("sucesso", "Horários excluídos com sucesso.");
+		}else {
+			attr.addFlashAttribute("falha", "Horários de datas anteriores a data de hoje não"
+					+ " poderão ser excluídos! ");			
+		}
+		
+		attr.addFlashAttribute("dataDisponivel", dataDisponibilizada);
+				
 		return "redirect:/profissionais/horarios";
 	}
 	
