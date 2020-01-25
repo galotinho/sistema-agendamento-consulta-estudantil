@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.edu.ifbaiano.cae</groupId>
 	<artifactId>cae-agendamento</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>CaeAgendamento</name>
 	<description>Serviço de Agendamento de Profissionais do CAE - IFBaiano</description>
 
