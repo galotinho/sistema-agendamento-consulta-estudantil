@@ -1,14 +1,13 @@
-FROM openjdk:8-jdk-slim
-ENV PORT 8080
-ENV CLASSPATH /opt/lib
-EXPOSE 8080
+FROM openjdk:11.0.13-jre-slim-buster
 
-# copy pom.xml and wildcards to avoid this command failing if there's no target/lib directory
-COPY pom.xml target/lib* /opt/lib/
+ENV TZ='GMT-3'
 
-# NOTE we assume there's only 1 jar in the target dir
-# but at least this means we don't have to guess the name
-# we could do with a better way to know the name - or to always create an app.jar or something
-COPY target/*.jar /opt/app.jar
-WORKDIR /opt
-CMD ["java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "app.jar"]
+VOLUME /tmp
+
+EXPOSE 8083
+
+ARG JAR_FILE=target/*.jar
+
+ADD ${JAR_FILE} CaeAgendamento.jar
+
+ENTRYPOINT ["java","-Xmx512M","-jar","/CaeAgendamento.jar"]
