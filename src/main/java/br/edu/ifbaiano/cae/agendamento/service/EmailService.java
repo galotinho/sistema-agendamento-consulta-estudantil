@@ -39,7 +39,7 @@ public class EmailService {
 		helper.setTo(destino);
 		helper.setText(html, true);
 		helper.setSubject("Confirmacao de Cadastro");
-		helper.setFrom("nao-responder@ifbaiano.com.br");
+		helper.setFrom("cae.ifbaiano.urucuca@gmail.com");
 		
 		helper.addInline("logo", new ClassPathResource("/static/image/marca-horizontal.png"));
 		
@@ -61,7 +61,7 @@ public class EmailService {
         helper.setTo(destino);
         helper.setText(html, true);
         helper.setSubject("Redefinição de Senha");
-        helper.setFrom("no-replay@ifbaiano.com.br");
+        helper.setFrom("cae.ifbaiano.urucuca@gmail.com");
 
         helper.addInline("logo", new ClassPathResource("/static/image/marca-horizontal.png"));  
        
@@ -85,7 +85,7 @@ public class EmailService {
 		helper.setTo(destinatarios);
 		helper.setText(html, true);
 		helper.setSubject("Cancelamento de Consulta");
-		helper.setFrom("nao-responder@ifbaiano.com.br");
+		helper.setFrom("cae.ifbaiano.urucuca@gmail.com");
 		
 		helper.addInline("logo", new ClassPathResource("/static/image/marca-horizontal.png"));
 		
