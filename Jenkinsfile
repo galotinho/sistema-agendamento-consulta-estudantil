@@ -19,7 +19,7 @@ pipeline {
             steps {
                 sh ' docker stop cae || true' 
                 sh ' docker rm cae || true'
-                sh ' docker container run --network intranet -d --name cae -p 9090:8080 -p 25:25 cae:${BUILD_NUMBER}'
+                sh ' docker container run --network host -d --name cae cae:${BUILD_NUMBER}'
             }
         }        
     }
